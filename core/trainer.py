@@ -215,7 +215,8 @@ class WeightedProcrustesTrainer:
         # Inlier prediction with 6D ConvNet
         inlier_timer.tic()
         reg_sinput = ME.SparseTensor(reg_feats.contiguous(),
-                                     coords=reg_coords.int()).to(self.device)
+                                     coordinates=reg_coords.int(),
+                                     device=self.device)
         reg_soutput = self.inlier_model(reg_sinput)
         inlier_timer.toc()
 
@@ -396,7 +397,8 @@ class WeightedProcrustesTrainer:
 
       inlier_timer.tic()
       reg_sinput = ME.SparseTensor(reg_feats.contiguous(),
-                                   coords=reg_coords.int()).to(self.device)
+                                   coordinates=reg_coords.int(),
+                                   device=self.device)
       reg_soutput = self.inlier_model(reg_sinput)
       inlier_timer.toc()
 
@@ -630,10 +632,10 @@ class WeightedProcrustesTrainer:
   def generate_inlier_input(self, xyz0, xyz1, iC0, iC1, iF0, iF1, len_batch, pos_pairs):
     # pairs consist of (xyz1 index, xyz0 index)
     stime = time.time()
-    sinput0 = ME.SparseTensor(iF0, coords=iC0).to(self.device)
+    sinput0 = ME.SparseTensor(iF0, coordinates=iC0, device=self.device)
     oF0 = self.feat_model(sinput0).F
 
-    sinput1 = ME.SparseTensor(iF1, coords=iC1).to(self.device)
+    sinput1 = ME.SparseTensor(iF1, coordinates=iC1, device=self.device)
     oF1 = self.feat_model(sinput1).F
     feat_time = time.time() - stime
 

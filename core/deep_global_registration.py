@@ -145,7 +145,7 @@ class DeepGlobalRegistration:
 
     # Voxelization:
     # Maintain double type for xyz to improve numerical accuracy in quantization
-    sel = ME.utils.sparse_quantize(xyz / self.voxel_size, return_index=True)
+    _, sel = ME.utils.sparse_quantize(xyz / self.voxel_size, return_index=True)
     npts = len(sel)
 
     xyz = torch.from_numpy(xyz[sel])
@@ -160,7 +160,7 @@ class DeepGlobalRegistration:
     '''
     Step 1: extract fast and accurate FCGF feature per point
     '''
-    sinput = ME.SparseTensor(feats, coords=coords).to(self.device)
+    sinput = ME.SparseTensor(feats, coordinates=coords, device=self.device)
 
     return self.fcgf_model(sinput).F
 
@@ -207,7 +207,7 @@ class DeepGlobalRegistration:
     '''
     Step 4: predict inlier likelihood
     '''
-    sinput = ME.SparseTensor(inlier_feats, coords=coords).to(self.device)
+    sinput = ME.SparseTensor(inlier_feats, coordinates=coords, device=self.device)
     soutput = self.inlier_model(sinput)
 
     return soutput.F
@@ -311,9 +311,9 @@ class DeepGlobalRegistration:
       print(f'=> Safeguard takes {safeguard_time:.2} s')
 
     if self.use_icp:
-      T = o3d.registration.registration_icp(
+      T = o3d.pipelines.registration.registration_icp(
           make_open3d_point_cloud(xyz0),
           make_open3d_point_cloud(xyz1), self.voxel_size * 2, T,
-          o3d.registration.TransformationEstimationPointToPoint()).transformation
+          o3d.pipelines.registration.TransformationEstimationPointToPoint()).transformation
 
     return T
