@@ -6,10 +6,11 @@
 # - Christopher Choy, JunYoung Gwak, Silvio Savarese, 4D Spatio-Temporal ConvNets: Minkowski Convolutional Neural Networks, CVPR 2019
 from dataloader.threedmatch_loader import *
 from dataloader.kitti_loader import *
+from dataloader.ycbvideo_loader import *
 
 ALL_DATASETS = [
     ThreeDMatchPairDataset07, ThreeDMatchPairDataset05, ThreeDMatchPairDataset03,
-    ThreeDMatchTrajectoryDataset, KITTIPairDataset, KITTINMPairDataset
+    ThreeDMatchTrajectoryDataset, KITTIPairDataset, KITTINMPairDataset, YCBVideoPairDataset
 ]
 dataset_str_mapping = {d.__name__: d for d in ALL_DATASETS}
 
